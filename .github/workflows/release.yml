@@ -1,4 +1,4 @@
-name: auto-rmskin-package
+name: auto-rmskin
 
 on:
   release:
