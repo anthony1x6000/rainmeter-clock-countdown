@@ -1,9 +1,8 @@
 name: auto-rmskin-package
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [created]
 
 jobs:
   package:
@@ -13,6 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.release.target_commitish }}
 
       - name: Create rmskin
         shell: powershell
@@ -45,11 +46,5 @@ jobs:
         with:
           name: clockan
           path: ${{ steps.create_rmskin.outputs.target }}
-      - name: Post artifact URL to discussion
-        uses: peter-evans/create-or-update-comment@v2
-        if: success()
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          body: "The artifact URL is: ${{ steps.upload-rmskin-file.outputs.artifact_url }}"
-          issue-number: "$(date +%m-%d)-$(date +%s)"
+          artifact_name: clockan-${{ github.event.release.tag_name }}.rmskin
+          target_path: ${{ github.event.release.tag_name }}
