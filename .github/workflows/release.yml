@@ -40,3 +40,19 @@ jobs:
         with:
           name: clockan
           path: ${{ steps.create_rmskin.outputs.target }}
+      - name: Echo artifact download link
+        run: echo "The artifact download link is: https://github.com/${{ github.repository }}/actions/artifacts/download/clockan/${{ steps.upload-rmskin-file.outputs.artifact_url }}"
+      - name: Create a new GitHub Discussion
+        id: create-discussion
+        uses: abirismyname/create-discussion@v1.x
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+        with:
+          title: Artifact $(date +%m-%d)-$(date +%s)
+          body: |
+            Artifact Link: $(date +%m-%d)-$(date +%s). Link = https://github.com/${{ github.repository }}/actions/artifacts/download/clockan/${{ steps.upload-rmskin-file.outputs.artifact_url }}
+          category-id: ${{ secrets.CAT_ID }}  
+      - name: Print discussion url and id
+        run: |
+          echo discussion-id: ${{steps.create-discussion.outputs.discussion-id}} 
+          echo discussion-url: ${{steps.create-discussion.outputs.discussion-url}}             
