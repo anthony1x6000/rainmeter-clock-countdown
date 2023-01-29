@@ -45,21 +45,11 @@ jobs:
         with:
           name: clockan
           path: ${{ steps.create_rmskin.outputs.target }}
-      - name: Create Release
-        uses: actions/create-release@v1
+      - name: Post artifact URL to discussion
+        uses: peter-evans/create-or-update-comment@v2
+        if: success()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: $(date '+%m-%d-%s')
-          release_name: Release $(date '+%m-%d-%s')
-          draft: false
-          prerelease: false
-      - name: Upload rmskin file
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: $target
-          asset_name: $(date '+%m-%d-%s').rmskin
-          asset_content_type: application/x-rmskin
+          body: "The artifact URL is: \`${{ steps.upload-rmskin-file.outputs.artifact_url }}\`"
+          issue_number: ${{ github.event.release.release_id }}
