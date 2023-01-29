@@ -19,7 +19,7 @@ jobs:
         id: create_rmskin
         run: |
           Write-Output "Compressing archive: *"
-          $target = "${{ github.event.repository.name }}_${{ github.event.release.tag_name }}.zip"
+          $target = "${{ github.event.repository.name }}.zip"
           Compress-Archive -Path ./* -DestinationPath $target
           Write-Output "Archive: $target"
 
@@ -40,8 +40,8 @@ jobs:
           Write-Output "File to upload: $target"
 
           echo "::set-output name=target::$target"
-      - name: Upload rmskin file
-        uses: actions/upload-artifact@v2
-        with:
-          name: clockan
-          path: $target
+        - name: Upload rmskin file
+          uses: actions/upload-artifact@v2
+          with:
+            name: clockan
+            path: $target
