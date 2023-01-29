@@ -7,13 +7,11 @@ on:
 jobs:
   package:
     runs-on: windows-latest
-    outputs:
-      target: ${{ steps.create_rmskin.outputs.target }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.release.target_commitish }}
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Create rmskin
         shell: powershell
@@ -40,11 +38,12 @@ jobs:
           $target = $target.Replace(".zip", ".rmskin")
           Write-Output "File to upload: $target"
 
-          echo "::set-output name=target::$target"
-      - name: Upload rmskin file
-        uses: actions/upload-artifact@v2
+      - name: Upload rmskin file as release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: clockan
-          path: ${{ steps.create_rmskin.outputs.target }}
-          artifact_name: clockan-${{ github.event.release.tag_name }}.rmskin
-          target_path: ${{ github.event.release.tag_name }}
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.create_rmskin.outputs.target }}
+          asset_name: clockan.rmskin
+          asset_content_type: application/octet-stream
