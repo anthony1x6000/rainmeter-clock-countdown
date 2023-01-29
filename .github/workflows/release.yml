@@ -39,11 +39,7 @@ jobs:
           Write-Output "File to upload: $target"
 
       - name: Upload rmskin file as release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ steps.create_rmskin.outputs.target }}
-          asset_name: clockan.rmskin
-          asset_content_type: application/octet-stream
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ steps.create_rmskin.outputs.target }}
