@@ -41,11 +41,13 @@ jobs:
 
           echo "::set-output name=target::$target"
 
-      - name: Publish Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: "${{ steps.create_rmskin.outputs.target }}"
-          tag: "${{ github.event.release.tag_name }}"
-          draft: false
+      - name: Upload rmskin
+        id: upload_rmskin
+        uses: actions/upload-release-asset@v1.0.1
         env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_name: ${{ steps.create_rmskin.outputs.target }}
+          asset_path: ${{ steps.create_rmskin.outputs.target }}
+          asset_content_type: application/octet-stream
