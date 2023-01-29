@@ -51,6 +51,7 @@ jobs:
           title: Artifact $(date +%m-%d)-$(date +%s)
           body: |
             Artifact Link: $(date +%m-%d)-$(date +%s). Link = https://github.com/${{ github.repository }}/actions/artifacts/download/clockan/${{ steps.upload-rmskin-file.outputs.artifact_url }}
+          repository-id: ${{ secrets.REPO_ID }}
           category-id: ${{ secrets.CAT_ID }}  
       - name: Print discussion url and id
         run: |
