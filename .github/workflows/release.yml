@@ -37,8 +37,17 @@ jobs:
           Rename-Item -Path $target -NewName ([io.path]::ChangeExtension($target, '.rmskin'))
           $target = $target.Replace(".zip", ".rmskin")
           Write-Output "File to upload: $target"
+      - name: Artifact rmskin 
+        uses: actions/upload-artifact@v2
+        with:
+          name: clockan
+          path: ${{ steps.create_rmskin.outputs.target }}
 
       - name: Upload rmskin file as release asset
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.event.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           files: ${{ steps.create_rmskin.outputs.target }}
