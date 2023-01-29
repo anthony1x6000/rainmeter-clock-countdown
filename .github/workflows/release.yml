@@ -20,7 +20,7 @@ jobs:
         run: |
           Write-Output "Compressing archive: RMSKIN/*"
           $target = "${{ github.event.repository.name }}_${{ github.event.release.tag_name }}.zip"
-          Compress-Archive -Path ./RMSKIN/* -DestinationPath $target
+          Compress-Archive -Path ./* -DestinationPath $target
           Write-Output "Archive: $target"
 
           Write-Output "Writing footer..."
