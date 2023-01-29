@@ -41,5 +41,4 @@ jobs:
       - name: Upload rmskin file as release asset
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           files: ${{ steps.create_rmskin.outputs.target }}
