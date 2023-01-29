@@ -18,9 +18,9 @@ jobs:
         shell: powershell
         id: create_rmskin
         run: |
-          Write-Output "Compressing archive: ./*"
+          Write-Output "Compressing archive: ."
           $target = "${{ github.event.repository.name }}_${{ github.event.release.tag_name }}.zip"
-          Compress-Archive -Path ./* -DestinationPath $target
+          Compress-Archive -Path . -DestinationPath $target
           Write-Output "Archive: $target"
 
           Write-Output "Writing footer..."
