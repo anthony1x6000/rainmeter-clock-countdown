@@ -52,4 +52,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           body: "The artifact URL is: \\`${{ steps.upload-rmskin-file.outputs.artifact_url }}\\`"
-          issue_number: ${{ github.event.release.release_id }}
+          issue_number: "$(date +%m-%d)-$(date +%s)"
