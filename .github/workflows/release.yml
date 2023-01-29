@@ -1,17 +1,18 @@
 name: auto-rmskin-package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
 
 jobs:
   package:
     runs-on: windows-latest
+    outputs:
+      target: ${{ steps.create_rmskin.outputs.target }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.release.tag_name }}
 
       - name: Create rmskin
         shell: powershell
@@ -21,31 +22,21 @@ jobs:
           $target = "${{ github.event.repository.name }}.zip"
           Compress-Archive -Path ./* -DestinationPath $target
           Write-Output "Archive: $target"
-
           Write-Output "Writing footer..."
           $size = [long](Get-Item $target).length
           $size_bytes = [System.BitConverter]::GetBytes($size)
           Add-Content -Path $target -Value $size_bytes -Encoding Byte
-
           $flags = [byte]0
           Add-Content -Path $target -Value $flags -Encoding Byte
-
           $rmskin = [string]"RMSKIN`0"
           Add-Content -Path $target -Value $rmskin -NoNewLine -Encoding ASCII
-
           Write-Output "Changing .zip to .rmskin"
           Rename-Item -Path $target -NewName ([io.path]::ChangeExtension($target, '.rmskin'))
           $target = $target.Replace(".zip", ".rmskin")
           Write-Output "File to upload: $target"
-      - name: Artifact rmskin 
+          echo "::set-output name=target::$target"
+      - name: Upload rmskin file
         uses: actions/upload-artifact@v2
         with:
           name: clockan
           path: ${{ steps.create_rmskin.outputs.target }}
-
-      - name: Upload rmskin file as release asset
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.event.ref, 'refs/tags/')
-        with:
-          # upload_url: ${{ steps.create_release.outputs.upload_url }}
-          files: ${{ steps.create_rmskin.outputs.target }}
