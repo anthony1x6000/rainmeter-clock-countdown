@@ -1,4 +1,4 @@
-name: auto-rmskin
+name: auto-rmskin-package
 
 on:
   release:
@@ -12,15 +12,15 @@ jobs:
       target: ${{ steps.create_rmskin.outputs.target }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Create rmskin
         shell: powershell
         id: create_rmskin
         run: |
-          Write-Output "Compressing archive: ."
+          Write-Output "Compressing archive: *"
           $target = "${{ github.event.repository.name }}_${{ github.event.release.tag_name }}.zip"
-          Compress-Archive -Path . -DestinationPath $target
+          Compress-Archive -Path ./* -DestinationPath $target
           Write-Output "Archive: $target"
 
           Write-Output "Writing footer..."
@@ -41,13 +41,11 @@ jobs:
 
           echo "::set-output name=target::$target"
 
-      - name: Upload rmskin
-        id: upload_rmskin
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Release
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_name: ${{ steps.create_rmskin.outputs.target }}
-          asset_path: ${{ steps.create_rmskin.outputs.target }}
-          asset_content_type: application/octet-stream
+          files: "${{ steps.create_rmskin.outputs.target }}"
+          tag: "${{ github.event.release.tag_name }}"
+          draft: false
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
