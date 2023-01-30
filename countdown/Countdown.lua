@@ -5,8 +5,7 @@ function Update()
         {day = 1, month = 2, year = 2023, hour=9, min=00, sec=7, endtxt="until english exam"},
         {day = 30, month = 4, year = 2023, hour=17, min=30, sec=30, endtxt="finalize highschool volunteer hours"},
         {day = 27, month = 7, year = 2023, hour=14, min=55, sec=0, endtxt="until end of school"},
-        {day = 27, month = 7, year = 2999, hour=0, min=0, sec=0, endtxt="thing overflows"},
-    } -- right now, that is the max amount that is displayed with what i configured it to be. except for that last one... the thing overflows
+    } -- right now, that is the max amount that is displayed is 5. 
 
     local timeRemainingText = ""
     for i, target in ipairs(targets) do
