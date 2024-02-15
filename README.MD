@@ -4,8 +4,6 @@ Thing I made for my desktop.
 
 ![screenshot](https://files.catbox.moe/pohrhh.png)
 
-Someone else made the clock. idk who ... but the license they left doesnt seem to make that matter. I modified the clock a bit and then added another element to countdown times. 
-
 I might change the fonts for the countdowns.
 
 ## Installation
